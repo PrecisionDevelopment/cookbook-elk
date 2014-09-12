@@ -1,0 +1,18 @@
+input {
+	rabbitmq {
+		host => "localhost"
+		key => "log4net.gelf.appender"
+		password => "loggin"
+		port => 5672
+		user => "logstash"
+		vhost => "/"
+		queue => "logstash"
+		exchange => "logstash"
+	}
+}
+
+output {
+	elasticsearch {
+		host => localhost
+	}
+}
