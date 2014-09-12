@@ -17,7 +17,6 @@ node.set['rabbitmq']['default_user'] = "logstash"
 node.set['rabbitmq']['default_pass'] = "loggin"
 
 include_recipe "rabbitmq::default"
-include_recipe "rabbitmq::mgmt_console"
 
 rabbitmq_user "logstash" do
 	password "loggin"
@@ -37,6 +36,26 @@ rabbitmq_user "logstash" do
 	vhost "/"
 	permissions ".* .* .*"
 	action :set_permissions
+end
+
+include_recipe "rabbitmq::mgmt_console"
+
+remote_file "/usr/local/bin/rabbitmqadmin" do
+	source "http://hg.rabbitmq.com/rabbitmq-management/raw-file/rabbitmq_v3_3_5/bin/rabbitmqadmin"
+	mode 755
+	notifies :restart, "service[rabbitmq-server]", :immediately
+end
+
+bash "create exchange" do
+	code "rabbitmqadmin --username=logstash --password=loggin declare exchange name=logstash type=topic durable=false"
+end
+
+bash "create queue" do
+	code "rabbitmqadmin --username=logstash --password=loggin declare queue name=logstash durable=false"
+end
+
+bash "bind queue to exchange" do
+	code "rabbitmqadmin declare binding source=logstash destination_type=queue destination=logstash routing_key=\"log4net.gelf.appender\""
 end
 
 remote_file "/tmp/elasticsearch-1.3.2.deb" do
@@ -87,7 +106,7 @@ end
 bash "extract kibana" do
 	code <<-EOH
 	tar -zxvf /tmp/kibana-3.1.0.tar.gz
-	rm -rf /opt/www/kibana
+	rm -rf /opt/www/kibana/*
 	mv kibana-3.1.0/* /opt/www/kibana
 	EOH
 	action :nothing
