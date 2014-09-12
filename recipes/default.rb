@@ -16,7 +16,7 @@ end
 node.set['rabbitmq']['default_user'] = "logstash"
 node.set['rabbitmq']['default_pass'] = "loggin"
 
-include_recipe "rabbitmq::default"
+include_recipe "rabbitmq::mgmt_console"
 
 rabbitmq_user "logstash" do
 	password "loggin"
@@ -38,8 +38,6 @@ rabbitmq_user "logstash" do
 	action :set_permissions
 end
 
-include_recipe "rabbitmq::mgmt_console"
-
 remote_file "/usr/local/bin/rabbitmqadmin" do
 	source "http://hg.rabbitmq.com/rabbitmq-management/raw-file/rabbitmq_v3_3_5/bin/rabbitmqadmin"
 	mode 755
@@ -47,11 +45,11 @@ remote_file "/usr/local/bin/rabbitmqadmin" do
 end
 
 bash "create exchange" do
-	code "rabbitmqadmin --username=logstash --password=loggin declare exchange name=logstash type=topic durable=false"
+	code "rabbitmqadmin --username=logstash --password=loggin declare exchange name=logstash type=topic durable=true"
 end
 
 bash "create queue" do
-	code "rabbitmqadmin --username=logstash --password=loggin declare queue name=logstash durable=false"
+	code "rabbitmqadmin --username=logstash --password=loggin declare queue name=logstash durable=true"
 end
 
 bash "bind queue to exchange" do
@@ -92,15 +90,15 @@ service "logstash" do
 	action :start
 end
 
-remote_file "/tmp/kibana-3.1.0.tar.gz" do
-	source "https://download.elasticsearch.org/kibana/kibana/kibana-3.1.0.tar.gz"
-	mode 0644
-	notifies :run, "bash[extract kibana]"
-end
-
 directory "/opt/www/kibana" do
 	action :create
 	recursive true
+end
+
+remote_file "/tmp/kibana-3.1.0.tar.gz" do
+	source "https://download.elasticsearch.org/kibana/kibana/kibana-3.1.0.tar.gz"
+	mode 0644
+	notifies :run, "bash[extract kibana]", :immediately
 end
 
 bash "extract kibana" do
@@ -119,7 +117,7 @@ end
 
 template "/etc/nginx/sites-enabled/default" do
 	source "default.erb"
-	notifies :restart, "service[nginx]"
+	notifies :restart, "service[nginx]", :immediately
 end
 
 template "/opt/www/kibana/config.js" do
