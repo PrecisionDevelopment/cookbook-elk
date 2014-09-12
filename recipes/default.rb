@@ -87,7 +87,7 @@ end
 bash "extract kibana" do
 	code <<-EOH
 	tar -zxvf /tmp/kibana-3.1.0.tar.gz
-	rm -p /opt/www/kibana
+	rm -rf /opt/www/kibana
 	mv kibana-3.1.0/* /opt/www/kibana
 	EOH
 	action :nothing
