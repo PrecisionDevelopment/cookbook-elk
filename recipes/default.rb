@@ -59,7 +59,7 @@ end
 remote_file "/tmp/elasticsearch-1.3.2.deb" do
 	source "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.3.2.deb"
 	mode 0644
-	checksum "156a38c5a829e5002ae8147c6cac20effe6cd065"
+	checksum "bfef0ec046de85f6cbaf62b6eb6245d460fb8839168bdbad5b26f97bbee63552"
 end
 
 dpkg_package "elasticsearch" do
