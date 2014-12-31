@@ -74,7 +74,7 @@ end
 remote_file "/tmp/logstash_1.4.2-1-2c0f5a1_all.deb" do
 	source "https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb"
 	mode 0644
-	checksum "fb2c384f61b6834094b31a34d75b58d00c71d81a"
+	checksum "2045c464f37c2d0163d2fffb44740449ed37f7c5812d0c2e004ba7c8be0a78a1"
 end
 
 dpkg_package "logstash" do
