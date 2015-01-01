@@ -5,7 +5,7 @@ license				'All rights reserved'
 description			'Installs/Configures elk'
 long_description	'Installs/Configures elk'
 
-version				'0.1.0'
+version				'0.1.1'
 
 depends				'apt'
 depends				'rabbitmq'
