@@ -59,7 +59,6 @@ end
 remote_file "/tmp/elasticsearch-1.3.2.deb" do
 	source "https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.3.2.deb"
 	mode 0644
-	checksum "bfef0ec046de85f6cbaf62b6eb6245d460fb8839168bdbad5b26f97bbee63552"
 end
 
 dpkg_package "elasticsearch" do
@@ -74,7 +73,6 @@ end
 remote_file "/tmp/logstash_1.4.2-1-2c0f5a1_all.deb" do
 	source "https://download.elasticsearch.org/logstash/logstash/packages/debian/logstash_1.4.2-1-2c0f5a1_all.deb"
 	mode 0644
-	checksum "2045c464f37c2d0163d2fffb44740449ed37f7c5812d0c2e004ba7c8be0a78a1"
 end
 
 dpkg_package "logstash" do
